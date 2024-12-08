@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="category_list" >
+        <item>Điện thoại</item>
+        <item>Laptop</item>
+        <item>Loa</item>
+        <item>Tai nghe</item>
+        <item>Phụ kiện(chuột, bàn phím...)</item>
+        <item>Màn hình</item>
+        <item>Thiết bị đeo thông minh</item>
+        <item>Máy tính bảng</item>
+        <item>Máy tính bàn</item>
+        <item>TV</item>
+        <item>Camera</item>
+        <item>Linh kiện máy tính</item>
+        <item>Khác</item>
+    </string-array>
+
+    <string-array name="state_list">
+        <item>Đã sử dụng</item>
+        <item>Mới</item>
+    </string-array>
+
+
+    <string-array name="brand_list">
+        <!-- Hãng công nghệ tổng hợp -->
+        <item>Apple</item>
+        <item>Samsung</item>
+        <item>Xiaomi</item>
+        <item>Huawei</item>
+        <item>Oppo</item>
+        <item>Vivo</item>
+        <item>Realme</item>
+        <item>OnePlus</item>
+        <item>Google</item>
+        <item>Nokia</item>
+        <item>LG</item>
+        <item>Asus</item>
+        <item>HTC</item>
+        <item>Motorola</item>
+        <item>Microsoft</item>
+
+        <!-- Hãng máy tính, PC và laptop -->
+        <item>Dell</item>
+        <item>HP</item>
+        <item>Lenovo</item>
+        <item>Acer</item>
+        <item>MSI</item>
+        <item>Razer</item>
+        <item>Gigabyte</item>
+        <item>Alienware</item>
+
+        <!-- Hãng linh kiện máy tính -->
+        <item>Intel</item>
+        <item>AMD</item>
+        <item>NVIDIA</item>
+        <item>ASRock</item>
+        <item>EVGA</item>
+        <item>Cooler Master</item>
+        <item>Corsair</item>
+        <item>Kingston</item>
+        <item>Crucial</item>
+        <item>Seagate</item>
+        <item>Western Digital</item>
+        <item>Thermaltake</item>
+        <item>Noctua</item>
+
+        <!-- Hãng loa và tai nghe -->
+        <item>Bose</item>
+        <item>Sony</item>
+        <item>JBL</item>
+        <item>Harman Kardon</item>
+        <item>Sennheiser</item>
+        <item>Bang Olufsen</item>
+        <item>Marshall</item>
+        <item>Logitech</item>
+        <item>HyperX</item>
+        <item>SteelSeries</item>
+        <item>Audio-Technica</item>
+        <item>Beats by Dre</item>
+        <item>Shure</item>
+
+        <!-- Hãng thiết bị mạng và phụ kiện -->
+        <item>TP-Link</item>
+        <item>Netgear</item>
+        <item>D-Link</item>
+        <item>Ubiquiti</item>
+        <item>Anker</item>
+        <item>Belkin</item>
+
+        <!-- Hãng TV -->
+        <item>Panasonic</item>
+        <item>Toshiba</item>
+        <item>Philips</item>
+        <item>Sharp</item>
+        <item>Vizio</item>
+        <item>Hisense</item>
+        <item>TCL</item>
+        <item>Insignia</item>
+
+        <!-- Hãng thiết bị đeo thông minh -->
+        <item>Garmin</item>
+        <item>Fitbit</item>
+        <item>Amazfit</item>
+        <item>Fossil</item>
+        <item>Suunto</item>
+        <item>Mobvoi</item>
+        <item>Withings</item>
+
+        <item>Khác</item>
+    </string-array>
+
+    <string-array name="guarantee_list">
+        <item>Hết bảo hành</item>
+        <item>Còn bảo hành</item>
+    </string-array>
+
+
+    <string-array name="location_list">
+        <item>An Giang</item>
+        <item>Bà Rịa - Vũng Tàu</item>
+        <item>Bắc Giang</item>
+        <item>Bắc Kạn</item>
+        <item>Bạc Liêu</item>
+        <item>Bắc Ninh</item>
+        <item>Bến Tre</item>
+        <item>Bình Định</item>
+        <item>Bình Dương</item>
+        <item>Bình Phước</item>
+        <item>Bình Thuận</item>
+        <item>Cà Mau</item>
+        <item>Cần Thơ</item>
+        <item>Cao Bằng</item>
+        <item>Đà Nẵng</item>
+        <item>Đắk Lắk</item>
+        <item>Đắk Nông</item>
+        <item>Điện Biên</item>
+        <item>Đồng Nai</item>
+        <item>Đồng Tháp</item>
+        <item>Gia Lai</item>
+        <item>Hà Giang</item>
+        <item>Hà Nam</item>
+        <item>Hà Nội</item>
+        <item>Hà Tĩnh</item>
+        <item>Hải Dương</item>
+        <item>Hải Phòng</item>
+        <item>Hậu Giang</item>
+        <item>Hòa Bình</item>
+        <item>Hưng Yên</item>
+        <item>Khánh Hòa</item>
+        <item>Kiên Giang</item>
+        <item>Kon Tum</item>
+        <item>Lai Châu</item>
+        <item>Lâm Đồng</item>
+        <item>Lạng Sơn</item>
+        <item>Lào Cai</item>
+        <item>Long An</item>
+        <item>Nam Định</item>
+        <item>Nghệ An</item>
+        <item>Ninh Bình</item>
+        <item>Ninh Thuận</item>
+        <item>Phú Thọ</item>
+        <item>Phú Yên</item>
+        <item>Quảng Bình</item>
+        <item>Quảng Nam</item>
+        <item>Quảng Ngãi</item>
+        <item>Quảng Ninh</item>
+        <item>Quảng Trị</item>
+        <item>Sóc Trăng</item>
+        <item>Sơn La</item>
+        <item>Tây Ninh</item>
+        <item>Thái Bình</item>
+        <item>Thái Nguyên</item>
+        <item>Thanh Hóa</item>
+        <item>Thừa Thiên Huế</item>
+        <item>Tiền Giang</item>
+        <item>TP. Hồ Chí Minh</item>
+        <item>Trà Vinh</item>
+        <item>Tuyên Quang</item>
+        <item>Vĩnh Long</item>
+        <item>Vĩnh Phúc</item>
+        <item>Yên Bái</item>
+    </string-array>
+</resources>

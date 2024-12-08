@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Home.HomePageFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Khám phá danh mục"
+                android:textSize="25dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"/>
+
+            <!-- GridView 2 cột ngang -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/gv_category"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nổi bật"
+                android:textSize="25dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:textStyle="bold"/>
+            <!-- ListView ngang -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/lv_popular"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Có thể bạn quan tâm"
+                android:textSize="25dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:textStyle="bold"/>
+            <!-- GridView 2 cột dọc -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/gv_discover"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:padding="8dp" />
+
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</FrameLayout>

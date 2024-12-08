@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="Home"
+        android:icon="@drawable/home_icon"
+        android:id="@+id/home"/>
+    <item
+        android:id="@+id/add"
+        android:icon="@drawable/add_icon"
+        android:title="Add"
+        />
+    <item android:title="User"
+        android:icon="@drawable/user_icon"
+        android:id="@+id/user"/>
+</menu>
