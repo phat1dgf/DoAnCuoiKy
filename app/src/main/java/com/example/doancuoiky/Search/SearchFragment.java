@@ -32,6 +32,7 @@ public class SearchFragment extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String keyword) {
                 Intent intent = new Intent(getActivity(), SearchActivity.class);
+                intent.putExtra("keyword", keyword);
                 startActivity(intent);
                 return true;
             }

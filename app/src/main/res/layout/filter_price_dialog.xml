@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chọn khoảng giá"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:paddingBottom="12dp"/>
+
+    <com.google.android.flexbox.FlexboxLayout
+
+        android:id="@+id/flow_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:flexWrap="wrap"
+        android:padding="8dp">
+
+        <Button
+            android:id="@+id/btn_0_3m"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 - 3.000.000"
+            android:layout_marginEnd="10dp"/>
+
+        <Button
+            android:id="@+id/btn_3m_7m"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3.000.000 - 7.000.000"
+            android:layout_marginEnd="10dp"/>
+
+        <Button
+            android:id="@+id/btn_7m_12m"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="7.000.000 - 12.000.000"
+            android:layout_marginEnd="10dp"/>
+
+        <Button
+            android:id="@+id/btn_above_12m"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="> 12.000.000"
+            android:layout_marginEnd="10dp"/>
+    </com.google.android.flexbox.FlexboxLayout>
+</LinearLayout>

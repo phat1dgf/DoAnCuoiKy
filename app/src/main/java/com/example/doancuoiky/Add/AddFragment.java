@@ -1,4 +1,4 @@
-package com.example.doancuoiky;
+package com.example.doancuoiky.Add;
 
 
 import android.app.Activity;
@@ -20,9 +20,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-import com.example.doancuoiky.Instance.Product;
-import com.example.doancuoiky.Product.ProductActivity;
+import com.example.doancuoiky.Helper.FirestoreHelper;
+import com.example.doancuoiky.Models.Product;
 import com.example.doancuoiky.Product.UserProductActivity;
+import com.example.doancuoiky.R;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,6 +45,7 @@ public class AddFragment extends Fragment {
     //-----------------------------------------------------
     FirebaseAuth mAuth;
     FirebaseUser currentUser;
+    FirestoreHelper firestoreHelper = new FirestoreHelper();
 
     public AddFragment() {
         // Required empty public constructor
@@ -95,7 +97,7 @@ public class AddFragment extends Fragment {
             }
         });
 
-        btnAccept.setOnClickListener(new View.OnClickListener() {
+            btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 boolean isValid = validateAllInputs();
@@ -110,19 +112,32 @@ public class AddFragment extends Fragment {
                     String productGuarantee = act_guarantee.getText().toString().trim();
                     String productLocation = act_location.getText().toString().trim();
 
-//                    imgSelected.setDrawingCacheEnabled(true);
-//                    imgSelected.buildDrawingCache();
-//                    Bitmap productImage = ((BitmapDrawable) imgSelected.getDrawable()).getBitmap();
                     String productImage = selectedImageUri.toString();
                     Product newProduct = new Product(currentUid,productImage,productState,productName,productPrice,productLocation,productCategory,productBrand,productGuarantee,productDescription);
 
-                    onClickGoToUserProductPage(newProduct);
+                    BitmapDrawable drawable = (BitmapDrawable) imgSelected.getDrawable();
+                    Bitmap imgBitmap = drawable.getBitmap();
+
+                    saveProduct(currentUid,imgBitmap,productState,productName,productPrice,productLocation,productCategory,productBrand,productGuarantee,productDescription);
+
+                    goToUserProductPage(newProduct);
                 }
             }
         });
-
-
         return view;
+    }
+
+    private void saveProduct(String userID,
+                             Bitmap productImageSource,
+                             String productState,
+                             String productName,
+                             int productPrice,
+                             String location,
+                             String category,
+                             String brandName,
+                             String guarantee,
+                             String description) {
+        firestoreHelper.saveProductData(getActivity(),userID,productImageSource,productState,productName,productPrice,location,category,brandName,guarantee,description);
     }
 
     private boolean validateAllInputs() {
@@ -214,7 +229,7 @@ public class AddFragment extends Fragment {
             }
         }
     }
-    private void onClickGoToUserProductPage(Product product){
+    private void goToUserProductPage(Product product){
         Intent intent =new Intent(getActivity(), UserProductActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("product",product);

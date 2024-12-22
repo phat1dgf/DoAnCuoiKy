@@ -14,8 +14,10 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.doancuoiky.Add.AddFragment;
 import com.example.doancuoiky.Auth.LoginActivity;
 import com.example.doancuoiky.Home.HomeFragment;
+import com.example.doancuoiky.User.UserFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -25,8 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
     FirebaseAuth mAuth;
     FirebaseUser user;
-//    TextView tv_user;
-//    Button btn_logout;
+
     BottomNavigationView bottomNavigationView;
 
     @Override
@@ -42,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
 
-//        btn_logout = findViewById(R.id.btn_logout);
         if(user == null){
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
@@ -68,17 +68,6 @@ public class MainActivity extends AppCompatActivity {
                 return false; // Return false nếu không xử lý sự kiện
             }
         });
-
-//        btn_logout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FirebaseAuth.getInstance().signOut();
-//                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        });
-
     }
 
     private void replaceFragment(Fragment fragment){

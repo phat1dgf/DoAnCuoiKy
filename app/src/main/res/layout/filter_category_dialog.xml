@@ -1,0 +1,130 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chọn danh mục"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:paddingBottom="12dp"/>
+
+    <com.google.android.flexbox.FlexboxLayout
+
+        android:id="@+id/flow_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:flexWrap="wrap"
+        android:padding="8dp">
+
+        <!-- Các Button cho các option -->
+        <Button
+            android:id="@+id/btn_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Điện thoại"
+            android:layout_marginEnd="10dp"
+            />
+
+        <Button
+            android:id="@+id/btn_laptop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Laptop"
+            android:layout_marginEnd="10dp"
+           />
+
+        <Button
+            android:id="@+id/btn_speaker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Loa"
+            android:layout_marginEnd="10dp"
+           />
+
+        <Button
+            android:id="@+id/btn_headphone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tai nghe"
+            android:layout_marginEnd="10dp"
+           />
+
+        <Button
+            android:id="@+id/btn_accessories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Phụ kiện"
+            android:layout_marginEnd="10dp"
+         />
+
+        <Button
+            android:id="@+id/btn_monitor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Màn hình"
+            android:layout_marginEnd="10dp"
+          />
+
+        <Button
+            android:id="@+id/btn_wearable_device"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thiết bị đeo thông minh"
+            android:layout_marginEnd="10dp"
+         />
+
+        <Button
+            android:id="@+id/btn_tablet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Máy tính bảng"
+            android:layout_marginEnd="10dp"
+           />
+
+        <Button
+            android:id="@+id/btn_desktop_computer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Máy tính bàn"
+            android:layout_marginEnd="10dp"
+            />
+
+        <Button
+            android:id="@+id/btn_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TV"
+            android:layout_marginEnd="10dp"
+            />
+
+        <Button
+            android:id="@+id/btn_camera"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Camera"
+            android:layout_marginEnd="10dp"
+          />
+
+        <Button
+            android:id="@+id/btn_computer_parts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Linh kiện máy tính"
+            android:layout_marginEnd="10dp"
+       />
+
+        <Button
+            android:id="@+id/btn_other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Khác"
+            android:layout_marginEnd="10dp"
+         />
+    </com.google.android.flexbox.FlexboxLayout>
+    </LinearLayout>

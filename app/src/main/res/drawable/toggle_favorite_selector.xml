@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Trạng thái ON (đã favorite) -->
+    <item android:state_checked="true"
+        android:drawable="@drawable/favorite_icon" />
+
+    <!-- Trạng thái OFF (chưa favorite) -->
+    <item android:state_checked="false"
+        android:drawable="@drawable/non_favorite_icon" />
+</selector>

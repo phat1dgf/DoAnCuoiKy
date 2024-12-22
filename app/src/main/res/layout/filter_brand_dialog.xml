@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chọn hãng"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:paddingBottom="12dp"/>
+<com.google.android.flexbox.FlexboxLayout
+    android:id="@+id/flow_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:flexWrap="wrap"
+    android:padding="8dp">
+    >
+
+    <Button
+        android:id="@+id/btn_apple"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Apple"
+        android:layout_marginEnd="10dp"/>
+
+    <Button
+        android:id="@+id/btn_samsung"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Samsung"
+        android:layout_marginEnd="10dp"/>
+
+    <Button
+        android:id="@+id/btn_xiaomi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Xiaomi"
+        android:layout_marginEnd="10dp"/>
+
+    <Button
+        android:id="@+id/btn_huawei"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Huawei"
+        android:layout_marginEnd="10dp"/>
+
+    <Button
+        android:id="@+id/btn_oppo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Oppo"
+        android:layout_marginEnd="10dp"/>
+
+    <Button
+        android:id="@+id/btn_vivo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Vivo" />
+
+    <Button
+        android:id="@+id/btn_realme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Realme"
+        android:layout_marginEnd="10dp"/>
+
+    <Button
+        android:id="@+id/btn_oneplus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OnePlus"
+        android:layout_marginEnd="10dp"/>
+
+    <Button
+        android:id="@+id/btn_google"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Google"
+        android:layout_marginEnd="10dp"/>
+
+    <Button
+        android:id="@+id/btn_nokia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Nokia"
+        android:layout_marginEnd="10dp"/>
+
+    <Button
+        android:id="@+id/btn_lg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="LG"
+        android:layout_marginEnd="10dp"/>
+
+    <Button
+        android:id="@+id/btn_other_brand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Khác"
+        android:layout_marginEnd="10dp"/>
+</com.google.android.flexbox.FlexboxLayout>
+
+
+</LinearLayout>

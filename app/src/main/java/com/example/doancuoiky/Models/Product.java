@@ -1,11 +1,11 @@
-package com.example.doancuoiky.Instance;
-
-import android.graphics.Bitmap;
+package com.example.doancuoiky.Models;
 
 import java.io.Serializable;
 
 public class Product implements Serializable {
+    private String id;
     private String userID;
+    private int favorite;
 
     private String productImageSource;
     private String productState;
@@ -18,8 +18,23 @@ public class Product implements Serializable {
     private String guarantee;
     private String description;
 
-    public Product(String userID,
+    public String getId() {
+        return id;
+    }
 
+    public int getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(int favorite) {
+        this.favorite = favorite;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Product(String userID,
                    String productImageSource,
                    String productState,
                    String productName,
@@ -39,6 +54,7 @@ public class Product implements Serializable {
         this.brandName = brandName;
         this.guarantee = guarantee;
         this.description = description;
+        this.favorite = 0;
     }
 
     public String getProductImageSource() {
@@ -47,6 +63,14 @@ public class Product implements Serializable {
 
     public void setProductImageSource(String productImageSource) {
         this.productImageSource = productImageSource;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     public String getProductState() {

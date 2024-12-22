@@ -17,6 +17,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.doancuoiky.MainActivity;
 import com.example.doancuoiky.R;
+import com.example.doancuoiky.User.CreateProfileActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -76,19 +77,30 @@ public class RegisterActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if (task.isSuccessful()) {
-                                    Toast.makeText(RegisterActivity.this, "Authentication success.",
-                                            Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
-                                    startActivity(intent);
-                                    finish();
+                                    // Đăng nhập tự động sau khi tạo tài khoản thành công
+                                    mAuth.signInWithEmailAndPassword(email, password)
+                                            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                                    if (task.isSuccessful()) {
+                                                        // Đăng nhập thành công, chuyển đến MainActivity
+                                                        Toast.makeText(RegisterActivity.this, "Đăng ký và đăng nhập thành công.", Toast.LENGTH_SHORT).show();
+                                                        Intent intent = new Intent(getApplicationContext(), CreateProfileActivity.class);
+                                                        startActivity(intent);
+                                                        finish(); // Đóng RegisterActivity
+                                                    } else {
+                                                        // Lỗi khi đăng nhập
+                                                        Toast.makeText(RegisterActivity.this, "Lỗi khi đăng nhập.", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                }
+                                            });
                                 } else {
-                                    // If sign in fails, display a message to the user.
-                                    Toast.makeText(RegisterActivity.this, "Authentication failed.",
-                                            Toast.LENGTH_SHORT).show();
-
+                                    // Lỗi khi đăng ký
+                                    Toast.makeText(RegisterActivity.this, "Lỗi khi tạo tài khoản.", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
+
 
             }
         });

@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.doancuoiky.Instance.Product;
+import com.example.doancuoiky.Models.Product;
 import com.example.doancuoiky.R;
 
 import java.text.NumberFormat;
