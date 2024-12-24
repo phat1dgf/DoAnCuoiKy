@@ -83,7 +83,7 @@ public class ProductActivity extends AppCompatActivity {
             @Override
             public void onSuccess(User user) {
                 username.setText(user.getUsername());
-
+                phone = user.getPhone();
                 Bitmap img = decodeBase64ToBitmap(user.getImgProfileUrl());
                 img_user.setImageBitmap(img);
             }
@@ -186,7 +186,7 @@ public class ProductActivity extends AppCompatActivity {
             }
         });
 
-        fetchPhone(product);
+
         btn_call.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -205,23 +205,11 @@ public class ProductActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        checkIfProductIsFavorite(currentUserId, product.getId());
+
+        checkIfProductIsFavorite(FirebaseAuth.getInstance().getCurrentUser().getUid(), product.getId());
 
     }
-    private void fetchPhone(Product product){
-        firestoreHelper.getUserData(product.getUserID(), new FirestoreHelper.UserDataCallback() {
-            @Override
-            public void onSuccess(User user) {
-                phone = user.getPhone();
-            }
 
-            @Override
-            public void onFailure(String errorMessage) {
-                Toast.makeText(ProductActivity.this,errorMessage,Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
     public String getPriceRange(int price) {
         if (price <= 3000000) {
             return "0-3.000.000";
