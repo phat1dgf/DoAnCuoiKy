@@ -51,8 +51,6 @@ public class SearchActivity extends AppCompatActivity {
 
         String keyword = getIntent().getStringExtra("keyword");
 
-        // Lấy tất cả sản phẩm và lọc
-
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()

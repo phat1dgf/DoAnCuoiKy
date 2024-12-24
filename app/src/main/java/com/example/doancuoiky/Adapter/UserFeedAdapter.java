@@ -2,6 +2,9 @@ package com.example.doancuoiky.Adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,16 +38,26 @@ public class UserFeedAdapter extends ArrayAdapter<Product> {
         LayoutInflater layoutInflater = context.getLayoutInflater();
         convertView = layoutInflater.inflate(layout,null);
         Product product = list.get(position);
+
         ImageView img_product = convertView.findViewById(R.id.img_product);
-//        img_product.setImageResource(product.getProductImageSource());
+        Bitmap imgProduct = decodeBase64ToBitmap(product.getProductImageSource());
+        img_product.setImageBitmap(imgProduct);
         TextView tv_product_name = convertView.findViewById(R.id.tv_product_name);
         tv_product_name.setText(product.getProductName());
         TextView tv_product_price = convertView.findViewById(R.id.tv_product_price);
-        tv_product_name.setText(product.getProductPrice());
+        tv_product_price.setText(String.valueOf(product.getProductPrice()));
+
         TextView tv_product_state = convertView.findViewById(R.id.tv_product_state);
-        tv_product_name.setText(product.getProductState());
+        tv_product_state.setText(product.getProductState());
         TextView tv_product_location = convertView.findViewById(R.id.tv_product_location);
-        tv_product_name.setText(product.getLocation());
+        tv_product_location.setText(product.getLocation());
         return convertView;
     }
+
+    // Giải mã Base64 thành ảnh Bitmap
+    private Bitmap decodeBase64ToBitmap(String base64Image) {
+        byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+    }
+
 }

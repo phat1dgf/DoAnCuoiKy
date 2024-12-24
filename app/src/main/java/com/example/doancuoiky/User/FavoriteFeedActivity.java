@@ -28,7 +28,7 @@ public class FavoriteFeedActivity extends AppCompatActivity {
     ImageButton btn_back;
     ListView lv_favorite_feeds;
     UserFeedAdapter userFeedAdapter;
-    List<Product> productList;
+    ArrayList<Product> productList, favoriteProducts;
     List<String> favoriteProductIds; // Lưu trữ danh sách các productId mà người dùng yêu thích
     FirestoreHelper firestoreHelper;
 
@@ -46,32 +46,39 @@ public class FavoriteFeedActivity extends AppCompatActivity {
 
         firestoreHelper = new FirestoreHelper();
         productList = new ArrayList<>();
+        favoriteProducts = new ArrayList<>();
         favoriteProductIds = new ArrayList<>(); // Khởi tạo danh sách các sản phẩm yêu thích
-        fetchProductList();
-        fetchFavoriteProductIds();
+
 
         btn_back = findViewById(R.id.btn_back);
         btn_back.setOnClickListener(view -> finish());
 
         lv_favorite_feeds = findViewById(R.id.lv_favorite_feeds);
-        userFeedAdapter = new UserFeedAdapter(FavoriteFeedActivity.this, R.layout.product_item, getListFavoriteFeed());
+        userFeedAdapter = new UserFeedAdapter(FavoriteFeedActivity.this, R.layout.product_item, favoriteProducts);
         lv_favorite_feeds.setAdapter(userFeedAdapter);
 
         lv_favorite_feeds.setOnItemClickListener((adapterView, view, i, l) -> {
-            Product selectedProduct = getListFavoriteFeed().get(i);
+            Product selectedProduct = favoriteProducts.get(i);
             goToUserProductPage(selectedProduct);
         });
+
+        fetchFavoriteProductIds();
+        fetchProductList();
+        getListFavoriteFeed();
+
     }
 
     // Lấy danh sách các sản phẩm yêu thích
-    private ArrayList<Product> getListFavoriteFeed() {
-        ArrayList<Product> list = new ArrayList<>();
+    private void getListFavoriteFeed() {
         for (Product product : productList) {
             if (favoriteProductIds.contains(product.getId())) {
-                list.add(product);
+                favoriteProducts.add(product);
             }
         }
-        return list;
+        if (favoriteProducts.isEmpty()) {
+            Toast.makeText(this, "Danh sách yêu thích của bạn đang trống.", Toast.LENGTH_SHORT).show();
+        }
+        userFeedAdapter.notifyDataSetChanged();
     }
 
     // Chuyển đến trang chi tiết sản phẩm
@@ -90,7 +97,10 @@ public class FavoriteFeedActivity extends AppCompatActivity {
             public void onSuccess(List<Product> products) {
                 productList.clear();
                 productList.addAll(products);
-                userFeedAdapter.notifyDataSetChanged();
+
+                if (productList.isEmpty()) {
+                    Toast.makeText(FavoriteFeedActivity.this, "Không có sản phẩm nào.", Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -108,7 +118,6 @@ public class FavoriteFeedActivity extends AppCompatActivity {
             public void onSuccess(List<String> favoriteIds) {
                 favoriteProductIds.clear();
                 favoriteProductIds.addAll(favoriteIds);
-                userFeedAdapter.notifyDataSetChanged();  // Cập nhật lại adapter khi dữ liệu yêu thích đã có
             }
 
             @Override

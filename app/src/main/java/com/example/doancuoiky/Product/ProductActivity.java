@@ -1,8 +1,11 @@
 package com.example.doancuoiky.Product;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -24,13 +27,17 @@ import com.example.doancuoiky.R;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ProductActivity extends AppCompatActivity {
 
-    ImageView imgProduct;
-    TextView productName, productPrice, productState, productLocation;
+    ImageView img_Product;
+    TextView productName, productPrice, productState, productLocation,tv_description,username;
     ToggleButton toggle_btn_favorite;
     Button btn_call, btn_sms;
     FirestoreHelper firestoreHelper;
+    CircleImageView img_user;
+
 
     String phone;
 
@@ -57,11 +64,7 @@ public class ProductActivity extends AppCompatActivity {
             return; // Thoát nếu không có đối tượng product
         }
 
-
-
-
-
-        imgProduct = findViewById(R.id.img_product);
+        img_Product = findViewById(R.id.img_product);
         productName = findViewById(R.id.tv_product_name);
         productPrice = findViewById(R.id.tv_product_price);
         productState = findViewById(R.id.tv_product_state);
@@ -69,6 +72,9 @@ public class ProductActivity extends AppCompatActivity {
         toggle_btn_favorite = findViewById(R.id.toggle_btn_favorite);
         btn_call = findViewById(R.id.btn_call);
         btn_sms = findViewById(R.id.btn_sms);
+        username = findViewById(R.id.tv_username);
+        img_user = findViewById(R.id.img_user);
+        tv_description = findViewById(R.id.tv_description);
 
         toggle_btn_favorite.setOnClickListener(v -> {
             if (toggle_btn_favorite.isChecked()) {
@@ -134,7 +140,9 @@ public class ProductActivity extends AppCompatActivity {
         });
 
 
-        imgProduct.setImageURI(Uri.parse(product.getProductImageSource())); // Gán ảnh
+        Bitmap imgProduct = decodeBase64ToBitmap(product.getProductImageSource());
+        img_Product.setImageBitmap(imgProduct);
+
         productName.setText(product.getProductName()); // Gán tên sản phẩm
 
 
@@ -145,6 +153,8 @@ public class ProductActivity extends AppCompatActivity {
         productState.setText(product.getProductState());
 
         productLocation.setText(product.getLocation());
+
+        tv_description.setText(product.getDescription());
 
         firestoreHelper.updateUserHabits(product.getCategory(), getPriceRange(product.getProductPrice()), new FirestoreHelper.HabitUpdateCallback() {
             @Override
@@ -202,5 +212,9 @@ public class ProductActivity extends AppCompatActivity {
             return ">12.000.000";
         }
     }
-
+    // Giải mã Base64 thành ảnh Bitmap
+    private Bitmap decodeBase64ToBitmap(String base64Image) {
+        byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+    }
 }

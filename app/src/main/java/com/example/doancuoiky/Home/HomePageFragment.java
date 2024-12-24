@@ -17,11 +17,13 @@ import com.example.doancuoiky.Adapter.CategoryAdapter;
 import com.example.doancuoiky.Adapter.DiscoverProductAdapter;
 import com.example.doancuoiky.Adapter.PopularProductAdapter;
 import com.example.doancuoiky.Helper.FirestoreHelper;
+import com.example.doancuoiky.Interface.IClickCategoryItemListener;
 import com.example.doancuoiky.Interface.IClickProductItemListener;
 import com.example.doancuoiky.Models.Category;
 import com.example.doancuoiky.Models.Product;
 import com.example.doancuoiky.Product.ProductActivity;
 import com.example.doancuoiky.R;
+import com.example.doancuoiky.Search.SearchActivity;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -34,12 +36,15 @@ public class HomePageFragment extends Fragment {
     RecyclerView gvCategory;
     RecyclerView lvPopular;
     RecyclerView gvDiscover;
+    DiscoverProductAdapter discoverAdapter;
+    PopularProductAdapter popularAdapter;
 
     private FirestoreHelper firestoreHelper;
     private List<Product> productList;
     String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
     List<Product> discoverProducts;
+    List<Product> popularProducts;
 
     public HomePageFragment() {
         // Required empty public constructor
@@ -52,16 +57,22 @@ public class HomePageFragment extends Fragment {
         firestoreHelper = new FirestoreHelper();
         productList = new ArrayList<>();
         discoverProducts = new ArrayList<>();
-
+        popularProducts = new ArrayList<>();
+        //----------------------------------------------
         gvCategory = view.findViewById(R.id.gv_category);
         CategoryAdapter categoryAdapter = new CategoryAdapter(getContext());
         GridLayoutManager categoryGridLayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.HORIZONTAL, false);
         gvCategory.setLayoutManager(categoryGridLayoutManager);
-        categoryAdapter.setData(getListCategory());
+        categoryAdapter.setData(getListCategory(), new IClickCategoryItemListener() {
+            @Override
+            public void onClickCategoryItem(String keyword) {
+                goToSearchPage(keyword);
+            }
+        });
         gvCategory.setAdapter(categoryAdapter);
-
+        //----------------------------------------------
         lvPopular = view.findViewById(R.id.lv_popular);
-        PopularProductAdapter popularAdapter = new PopularProductAdapter(getListPopularProduct(), new IClickProductItemListener() {
+        popularAdapter = new PopularProductAdapter(popularProducts, new IClickProductItemListener() {
             @Override
             public void onClickProductItem(Product product) {
                 onClickGoToProductPage(product);
@@ -70,9 +81,9 @@ public class HomePageFragment extends Fragment {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         lvPopular.setLayoutManager(linearLayoutManager);
         lvPopular.setAdapter(popularAdapter);
-
+        //----------------------------------------------
         gvDiscover = view.findViewById(R.id.gv_discover);
-        DiscoverProductAdapter discoverAdapter = new DiscoverProductAdapter(discoverProducts, new IClickProductItemListener() {
+        discoverAdapter = new DiscoverProductAdapter(discoverProducts, new IClickProductItemListener() {
             @Override
             public void onClickProductItem(Product product) {
                 onClickGoToProductPage(product);
@@ -82,14 +93,14 @@ public class HomePageFragment extends Fragment {
         gvDiscover.setLayoutManager(discoverGridLayoutManager);
         gvDiscover.setAdapter(discoverAdapter);
 
-        fetchProductList(); // Gọi fetchProductList, sau đó fetchUserHabits trong onSuccess
+        fetchProductListAndHabits();
+        getListPopularProduct();
 
         return view;
     }
 
 
-    private List<Product> getListDiscoverProduct(Map<String, Long> categories, Map<String, Long> priceRanges) {
-        List<Product> list = new ArrayList<>();
+    private void getListDiscoverProduct(Map<String, Long> categories, Map<String, Long> priceRanges) {
 
         for (Product product : productList) {
             String productCategory = product.getCategory();
@@ -97,29 +108,26 @@ public class HomePageFragment extends Fragment {
 
             // Kiểm tra nếu category và price range có trong habits
             if (categories.containsKey(productCategory) && priceRanges.containsKey(priceRange)) {
-                list.add(product);
+                discoverProducts.add(product);
             }
 
             // Giới hạn số lượng sản phẩm tối đa là 20
-            if (list.size() >= 20) {
+            if (discoverProducts.size() >= 20) {
                 break;
             }
         }
-        return list;
+        discoverAdapter.notifyDataSetChanged();
     }
 
 
 
-    private List<Product> getListPopularProduct() {
-        // Sao chép danh sách gốc để tránh thay đổi productList
-        List<Product> sortedList = new ArrayList<>(productList);
-
-        // Sắp xếp danh sách theo số lượng favorite (giảm dần)
-        sortedList.sort((p1, p2) -> Integer.compare(p2.getFavorite(), p1.getFavorite()));
-
-        // Trả về tối đa 20 sản phẩm
-        return sortedList.size() > 20 ? sortedList.subList(0, 20) : sortedList;
+    private void getListPopularProduct() {
+        popularProducts.clear(); // Xóa danh sách cũ
+        popularProducts.addAll(productList);
+        popularProducts.sort((p1, p2) -> Integer.compare(p2.getFavorite(), p1.getFavorite()));
+        popularAdapter.notifyDataSetChanged();
     }
+
 
     private List<Category> getListCategory() {
         List<Category> list = new ArrayList<>();
@@ -145,33 +153,39 @@ public class HomePageFragment extends Fragment {
         startActivity(intent);
     }
 
-    private void fetchProductList() {
-
-        firestoreHelper.getAllProducts(new FirestoreHelper.ProductListCallback() {
-            @Override
-            public void onSuccess(List<Product> products) {
-                productList.clear();
-                productList.addAll(products);
-
-                // Chỉ gọi fetchUserHabits sau khi productList đã được tải xong
-                //fetchUserHabits();
-            }
-            @Override
-            public void onFailure(String errorMessage) {
-                Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
+//    private void fetchProductList() {
+//        firestoreHelper.getAllProducts(new FirestoreHelper.ProductListCallback() {
+//            @Override
+//            public void onSuccess(List<Product> products) {
+//                productList.clear();
+//                productList.addAll(products);
+//
+//                if (productList.isEmpty()) {
+//                    Toast.makeText(getContext(), "Hiện không có sản phẩm nào", Toast.LENGTH_SHORT).show();
+//                }
+//
+//                // Cập nhật Adapter sau khi lấy sản phẩm
+//                popularAdapter.notifyDataSetChanged();
+//                discoverAdapter.notifyDataSetChanged();
+//            }
+//
+//            @Override
+//            public void onFailure(String errorMessage) {
+//                Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
+//
+//
     private void fetchUserHabits() {
         firestoreHelper.getUserHabits(uid, new FirestoreHelper.HabitCallback() {
             @Override
             public void onSuccess(Map<String, Long> categories, Map<String, Long> priceRanges) {
-                discoverProducts.clear(); // Xóa danh sách cũ nếu có
-                discoverProducts.addAll(getListDiscoverProduct(categories, priceRanges));
+                discoverProducts.clear();
+                getListDiscoverProduct(categories, priceRanges);
 
                 // Cập nhật adapter
-                gvDiscover.getAdapter().notifyDataSetChanged();
+                discoverAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -192,5 +206,36 @@ public class HomePageFragment extends Fragment {
             return ">12.000.000";
         }
     }
+    private void goToSearchPage(String categoryName){
+        Intent intent = new Intent(getActivity(), SearchActivity.class);
+        intent.putExtra("keyword", categoryName);
+        startActivity(intent);
+    }
+
+    private void fetchProductListAndHabits() {
+        firestoreHelper.getAllProducts(new FirestoreHelper.ProductListCallback() {
+            @Override
+            public void onSuccess(List<Product> products) {
+                productList.clear();
+                productList.addAll(products);
+
+                if (productList.isEmpty()) {
+                    Toast.makeText(getContext(), "Không có sản phẩm nào.", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Gọi fetchUserHabits sau khi đã có sản phẩm
+                    fetchUserHabits();
+
+                    // Cập nhật sản phẩm phổ biến
+                    getListPopularProduct();
+                }
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
 }

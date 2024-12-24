@@ -1,6 +1,9 @@
 package com.example.doancuoiky.Adapter;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,8 +52,8 @@ public class DiscoverProductAdapter extends RecyclerView.Adapter<DiscoverProduct
         if(product ==null){
             return;
         }
-        holder.imgProduct.setImageURI(Uri.parse(product.getProductImageSource()));
-        holder.productName.setText(product.getProductName());
+        Bitmap imgProduct = decodeBase64ToBitmap(product.getProductImageSource());
+        holder.imgProduct.setImageBitmap(imgProduct);
         // Định dạng giá tiền
         String formattedPrice = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"))
                 .format(product.getProductPrice());
@@ -64,6 +67,13 @@ public class DiscoverProductAdapter extends RecyclerView.Adapter<DiscoverProduct
                 iClickProductItemListener.onClickProductItem(product);
             }
         });
+    }
+
+
+    // Giải mã Base64 thành ảnh Bitmap
+    private Bitmap decodeBase64ToBitmap(String base64Image) {
+        byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
 
     @Override

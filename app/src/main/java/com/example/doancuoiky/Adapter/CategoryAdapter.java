@@ -1,17 +1,21 @@
 package com.example.doancuoiky.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.doancuoiky.Interface.IClickCategoryItemListener;
 import com.example.doancuoiky.Models.Category;
 import com.example.doancuoiky.R;
+import com.example.doancuoiky.Search.SearchActivity;
 
 import java.util.List;
 
@@ -19,13 +23,15 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     private Context context;
     private List<Category> listCategory;
+    private IClickCategoryItemListener iClickCategoryItemListener;
 
     public CategoryAdapter(Context context) {
         this.context = context;
     }
 
-    public void setData(List<Category> list){
+    public void setData(List<Category> list,IClickCategoryItemListener listener){
         this.listCategory = list;
+        this.iClickCategoryItemListener = listener;
         notifyDataSetChanged();
     }
 
@@ -44,6 +50,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
         }
         holder.imgCategory.setImageResource(category.getCategoryImageSource());
         holder.categoryName.setText(category.getCategoryName());
+        holder.category_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iClickCategoryItemListener.onClickCategoryItem(category.getCategoryName());
+            }
+        });
     }
 
     @Override
@@ -56,12 +68,13 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     public class CategoryViewHolder extends RecyclerView.ViewHolder{
 
+        private LinearLayout category_item;
         private ImageView imgCategory;
         private TextView categoryName;
 
         public CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
-
+            category_item = itemView.findViewById(R.id.category_item);
             imgCategory = itemView.findViewById(R.id.img_category);
             categoryName = itemView.findViewById(R.id.tv_category_name);
         }

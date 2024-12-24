@@ -56,7 +56,7 @@ public class Product implements Serializable {
         this.description = description;
         this.favorite = 0;
     }
-
+    public Product(){}
     public String getProductImageSource() {
         return productImageSource;
     }

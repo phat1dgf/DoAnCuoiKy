@@ -1,7 +1,10 @@
 package com.example.doancuoiky.Product;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Base64;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -58,7 +61,8 @@ public class UserProductActivity extends AppCompatActivity {
         btnUpdate = findViewById(R.id.btn_update);
 
         //---------------------------------------------------------
-        imgProduct.setImageURI(Uri.parse(product.getProductImageSource()));
+        Bitmap img = decodeBase64ToBitmap(product.getProductImageSource());
+        imgProduct.setImageBitmap(img);
         tvProductName.setText(product.getProductName());
         String formattedPrice = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"))
                 .format(product.getProductPrice());
@@ -70,5 +74,9 @@ public class UserProductActivity extends AppCompatActivity {
 
     }
 
-
+    // Giải mã Base64 thành ảnh Bitmap
+    private Bitmap decodeBase64ToBitmap(String base64Image) {
+        byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+    }
 }

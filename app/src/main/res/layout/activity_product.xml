@@ -83,27 +83,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="10dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:background="@drawable/et_border"
-                android:orientation="horizontal"
-                android:padding="10dp">
+
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="5dp">
+                    android:background="@drawable/et_border"
+                    android:padding="10dp"
+                    android:layout_margin="5dp">
 
                     <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/img_user"
                         android:layout_width="70dp"
                         android:layout_height="70dp"
                         android:scaleType="centerCrop"
-                        android:src="@drawable/banh_xeo"
+                        android:src="@drawable/blank_user"
                         app:civ_border_color="@color/primary"
                         app:civ_border_width="2dp"
                         />
@@ -123,36 +119,9 @@
                         android:textStyle="bold" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tv_review"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:drawableRight="@drawable/review_icon"
-                        android:gravity="center"
-                        android:text="4.9"
-                        android:textSize="20dp"
-                        android:textStyle="bold" />
 
-                    <Space
-                        android:layout_width="wrap_content"
-                        android:layout_height="10dp" />
 
-                    <TextView
-                        android:id="@+id/tv_reviewComment"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="44 đánh giá" />
-
-                </LinearLayout>
-
-            </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
