@@ -22,6 +22,7 @@ import com.example.doancuoiky.Interface.IClickProductItemListener;
 import com.example.doancuoiky.Models.Category;
 import com.example.doancuoiky.Models.Product;
 import com.example.doancuoiky.Product.ProductActivity;
+import com.example.doancuoiky.Product.UserProductActivity;
 import com.example.doancuoiky.R;
 import com.example.doancuoiky.Search.SearchActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,7 +42,7 @@ public class HomePageFragment extends Fragment {
 
     private FirestoreHelper firestoreHelper;
     private List<Product> productList;
-    String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+    String uid;
 
     List<Product> discoverProducts;
     List<Product> popularProducts;
@@ -58,6 +59,7 @@ public class HomePageFragment extends Fragment {
         productList = new ArrayList<>();
         discoverProducts = new ArrayList<>();
         popularProducts = new ArrayList<>();
+        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         //----------------------------------------------
         gvCategory = view.findViewById(R.id.gv_category);
         CategoryAdapter categoryAdapter = new CategoryAdapter(getContext());
@@ -146,9 +148,15 @@ public class HomePageFragment extends Fragment {
         return list;
     }
     private void onClickGoToProductPage(Product product){
-        Intent intent =new Intent(getActivity(), ProductActivity.class);
+        Intent intent;
+        if(product.getUserID().equals(uid)){
+            intent = new Intent(getActivity(), UserProductActivity.class);
+        }
+        else {
+            intent = new Intent(getActivity(), ProductActivity.class);
+        }
         Bundle bundle = new Bundle();
-        bundle.putSerializable("product",product);
+        bundle.putSerializable("product", product);
         intent.putExtras(bundle);
         startActivity(intent);
     }
