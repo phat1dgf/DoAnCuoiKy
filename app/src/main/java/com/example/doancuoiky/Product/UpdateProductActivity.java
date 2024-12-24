@@ -195,7 +195,6 @@ public class UpdateProductActivity extends AppCompatActivity {
         Bitmap img = decodeBase64ToBitmap(product.getProductImageSource());
         imgSelected.setImageBitmap(img);
 
-        // Set the image as selected (this will ensure the validation works for image presence)
         isImageSelected = true;
     }
 

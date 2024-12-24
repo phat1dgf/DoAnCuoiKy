@@ -96,7 +96,6 @@ public class HomePageFragment extends Fragment {
         gvDiscover.setAdapter(discoverAdapter);
 
         fetchProductListAndHabits();
-        getListPopularProduct();
 
         return view;
     }
@@ -161,30 +160,7 @@ public class HomePageFragment extends Fragment {
         startActivity(intent);
     }
 
-//    private void fetchProductList() {
-//        firestoreHelper.getAllProducts(new FirestoreHelper.ProductListCallback() {
-//            @Override
-//            public void onSuccess(List<Product> products) {
-//                productList.clear();
-//                productList.addAll(products);
-//
-//                if (productList.isEmpty()) {
-//                    Toast.makeText(getContext(), "Hiện không có sản phẩm nào", Toast.LENGTH_SHORT).show();
-//                }
-//
-//                // Cập nhật Adapter sau khi lấy sản phẩm
-//                popularAdapter.notifyDataSetChanged();
-//                discoverAdapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onFailure(String errorMessage) {
-//                Toast.makeText(getContext(), errorMessage, Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//    }
-//
-//
+
     private void fetchUserHabits() {
         firestoreHelper.getUserHabits(uid, new FirestoreHelper.HabitCallback() {
             @Override

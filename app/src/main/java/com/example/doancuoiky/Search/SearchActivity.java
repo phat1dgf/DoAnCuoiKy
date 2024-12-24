@@ -85,7 +85,7 @@ public class SearchActivity extends AppCompatActivity {
         btn_filter_price.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                showPriceFilterDialog();
             }
         });
         btn_filter_state.setOnClickListener(new View.OnClickListener() {
@@ -131,8 +131,12 @@ public class SearchActivity extends AppCompatActivity {
 
                 // Lọc sản phẩm theo keyword
                 filteredList.clear();
-                filteredList.addAll(getFilteredProducts(keyword));
-
+                for (Product product : productList) {
+                    if (product.getProductName().toLowerCase().contains(keyword.toLowerCase()) ||
+                            product.getCategory().toLowerCase().contains(keyword.toLowerCase())) {
+                        filteredList.add(product);
+                    }
+                }
 
                 productAdapter.notifyDataSetChanged();
             }
@@ -157,16 +161,6 @@ public class SearchActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private List<Product> getFilteredProducts(String keyword) {
-        List<Product> result = new ArrayList<>();
-        for (Product product : productList) {
-            if (product.getProductName().toLowerCase().contains(keyword.toLowerCase()) ||
-                    product.getCategory().toLowerCase().contains(keyword.toLowerCase())) {
-                result.add(product);
-            }
-        }
-        return result;
-    }
     private void showCategoryFilterDialog() {
         // Tạo BottomSheetDialog
         BottomSheetDialog dialog = new BottomSheetDialog(this);
@@ -214,7 +208,6 @@ public class SearchActivity extends AppCompatActivity {
 
         dialog.show();
     }
-
     private void filterProductsByCategory(String category) {
         List<Product> categoryFilteredList = new ArrayList<>();
         for (Product product : productList) {
@@ -228,6 +221,7 @@ public class SearchActivity extends AppCompatActivity {
         productAdapter.notifyDataSetChanged();
         checkEmptyList();
     }
+
     private void checkEmptyList(){
         if (filteredList.isEmpty()) {
             Toast.makeText(SearchActivity.this, "Không có sản phẩm phù hợp", Toast.LENGTH_SHORT).show();
@@ -282,7 +276,6 @@ public class SearchActivity extends AppCompatActivity {
 
         dialog.show();
     }
-
     private void filterProductsByOtherBrands() {
         List<Product> otherBrandFilteredList = new ArrayList<>();
 
@@ -314,8 +307,6 @@ public class SearchActivity extends AppCompatActivity {
         // Kiểm tra nếu không có sản phẩm
         checkEmptyList();
     }
-
-
     private void filterProductsByBrand(String brand) {
         List<Product> brandFilteredList = new ArrayList<>();
         for (Product product : productList) {
@@ -373,6 +364,7 @@ public class SearchActivity extends AppCompatActivity {
 
         checkEmptyList();
     }
+
     private void showGuaranteeFilterDialog() {
         // Tạo BottomSheetDialog
         BottomSheetDialog dialog = new BottomSheetDialog(this);
@@ -415,6 +407,7 @@ public class SearchActivity extends AppCompatActivity {
         // Kiểm tra nếu không có sản phẩm
         checkEmptyList();
     }
+
     private void showPriceFilterDialog() {
         // Tạo BottomSheetDialog
         BottomSheetDialog dialog = new BottomSheetDialog(this);
