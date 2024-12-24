@@ -1,5 +1,4 @@
-package com.example.doancuoiky.Add;
-
+package com.example.doancuoiky.Product;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,23 +7,23 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-
-
-import androidx.fragment.app.Fragment;
-
 import android.util.Base64;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.example.doancuoiky.Helper.FirestoreHelper;
 import com.example.doancuoiky.Models.Product;
-import com.example.doancuoiky.Product.UserProductActivity;
 import com.example.doancuoiky.R;
 import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
@@ -35,8 +34,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+public class UpdateProductActivity extends AppCompatActivity {
 
-public class AddFragment extends Fragment {
     TextInputLayout til_category, til_state, til_brand,til_guarantee,til_location;
     MaterialAutoCompleteTextView act_category, act_state,act_brand,act_guarantee,act_location;
     Button btnAccept;
@@ -53,48 +52,62 @@ public class AddFragment extends Fragment {
     FirebaseUser currentUser;
     FirestoreHelper firestoreHelper = new FirestoreHelper();
 
-    public AddFragment() {
-        // Required empty public constructor
-    }
-
-
+    String productID;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add, container, false);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_update_product);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+        Bundle bundle = getIntent().getExtras();
+
+        if (bundle == null) {
+            return; // Thoát nếu không có dữ liệu
+        }
+
+        Product product = (Product) bundle.get("product");
+        productID = product.getId();
+        if (product == null) {
+            return; // Thoát nếu không có đối tượng product
+        }
 
         mAuth = FirebaseAuth.getInstance();
         currentUser = mAuth.getCurrentUser();
         String currentUid = currentUser.getUid();
 
         //---------------------------------------------------------------
-        til_category = view.findViewById(R.id.menu_category);
-        til_state = view.findViewById(R.id.menu_state);
-        til_brand = view.findViewById(R.id.menu_brand);
-        til_guarantee = view.findViewById(R.id.menu_guarantee);
-        til_location = view.findViewById(R.id.menu_location);
+        til_category = findViewById(R.id.menu_category);
+        til_state = findViewById(R.id.menu_state);
+        til_brand = findViewById(R.id.menu_brand);
+        til_guarantee = findViewById(R.id.menu_guarantee);
+        til_location = findViewById(R.id.menu_location);
 
-        act_category = view.findViewById(R.id.input_category);
-        act_state = view.findViewById(R.id.input_state);
-        act_brand = view.findViewById(R.id.input_brand);
-        act_guarantee = view.findViewById(R.id.input_guarantee);
-        act_location = view.findViewById(R.id.input_location);
+        act_category = findViewById(R.id.input_category);
+        act_state = findViewById(R.id.input_state);
+        act_brand = findViewById(R.id.input_brand);
+        act_guarantee = findViewById(R.id.input_guarantee);
+        act_location = findViewById(R.id.input_location);
 
-        etProductName = view.findViewById(R.id.et_product_name);
-        etProductPrice = view.findViewById(R.id.et_product_price);
-        etProductDescription = view.findViewById(R.id.et_product_description);
+        etProductName = findViewById(R.id.et_product_name);
+        etProductPrice = findViewById(R.id.et_product_price);
+        etProductDescription = findViewById(R.id.et_product_description);
 
-        tvErrorTittle = view.findViewById(R.id.tv_error_title);
-        tvErrorPrice = view.findViewById(R.id.tv_error_price);
-        tvErrorDescription = view.findViewById(R.id.tv_error_description);
+        tvErrorTittle = findViewById(R.id.tv_error_title);
+        tvErrorPrice = findViewById(R.id.tv_error_price);
+        tvErrorDescription = findViewById(R.id.tv_error_description);
 
-        btnAccept = view.findViewById(R.id.btn_accept);
+        btnAccept = findViewById(R.id.btn_accept);
 
         //------------------------------------------------------------------
-        imgSelected = view.findViewById(R.id.img_selected_image);
-        btnSelectImg = view.findViewById(R.id.btn_select_image);
-        tvErrorImage = view.findViewById(R.id.tv_error_image);
+        imgSelected = findViewById(R.id.img_selected_image);
+        btnSelectImg = findViewById(R.id.btn_select_image);
+        tvErrorImage = findViewById(R.id.tv_error_image);
 
+        setAllInput(product);
 
         btnSelectImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,6 +115,7 @@ public class AddFragment extends Fragment {
                 imageChooser();
             }
         });
+
 
         btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,12 +132,16 @@ public class AddFragment extends Fragment {
                     String productGuarantee = act_guarantee.getText().toString().trim();
                     String productLocation = act_location.getText().toString().trim();
 
+
+
+
                     // Lấy ảnh đã chọn
                     BitmapDrawable drawable = (BitmapDrawable) imgSelected.getDrawable();
                     Bitmap imgBitmap = drawable.getBitmap();
 
+
                     // Tạo đối tượng Product mới
-                    Product newProduct = new Product(
+                    Product updatedProduct = new Product(
                             currentUid,
                             encodeImageToBase64(imgBitmap), // Truyền Bitmap vào Product
                             productState,
@@ -136,16 +154,49 @@ public class AddFragment extends Fragment {
                             productDescription
                     );
 
-                    // Lưu sản phẩm vào Firestore
-                    firestoreHelper.saveProductData(getActivity(), newProduct);
-
-                    // Chuyển sang trang sản phẩm người dùng
-                    goToUserProductPage(newProduct);
+                    updateProduct(updatedProduct);
+                    finish();
                 }
             }
+
         });
 
-        return view;
+    }
+
+    private void updateProduct(Product product) {
+
+        firestoreHelper.updateProductData(product,productID, new FirestoreHelper.UpdateProductCallback() {
+            @Override
+            public void onSuccess(String message) {
+                Toast.makeText(UpdateProductActivity.this,message,Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Toast.makeText(UpdateProductActivity.this,errorMessage,Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setAllInput(Product product) {
+        // Set the product name, price, description
+        etProductName.setText(product.getProductName());
+        etProductPrice.setText(String.valueOf(product.getProductPrice()));
+        etProductDescription.setText(product.getDescription());
+
+        // Set the category, state, brand, guarantee, and location dropdown values
+        act_category.setText(product.getCategory(), false);  // 'false' prevents the dropdown from showing
+        act_state.setText(product.getProductState(), false);
+        act_brand.setText(product.getBrandName(), false);
+        act_guarantee.setText(product.getGuarantee(), false);
+        act_location.setText(product.getLocation(), false);
+
+        // Decode the Base64 image and set it to the ImageView
+        Bitmap img = decodeBase64ToBitmap(product.getProductImageSource());
+        imgSelected.setImageBitmap(img);
+
+        // Set the image as selected (this will ensure the validation works for image presence)
+        isImageSelected = true;
     }
 
 
@@ -155,6 +206,12 @@ public class AddFragment extends Fragment {
         imgProfile.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+
+    // Giải mã Base64 thành ảnh Bitmap
+    private Bitmap decodeBase64ToBitmap(String base64Image) {
+        byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
 
     private boolean validateAllInputs() {
@@ -168,7 +225,6 @@ public class AddFragment extends Fragment {
 
         return isTextInputValid && isDropdownValid && isImageSelected;
     }
-
 
     private boolean textinputHandle() {
         boolean isValid = true;
@@ -190,7 +246,6 @@ public class AddFragment extends Fragment {
         }
         return isValid;
     }
-
 
     private boolean dropdownHandle() {
         boolean isValid = true;
@@ -214,7 +269,6 @@ public class AddFragment extends Fragment {
         }
         return isValid;
     }
-
 
     void imageChooser() {
 
@@ -246,7 +300,7 @@ public class AddFragment extends Fragment {
     }
 
     private void goToUserProductPage(Product product){
-        Intent intent =new Intent(getActivity(), UserProductActivity.class);
+        Intent intent =new Intent(UpdateProductActivity.this, UserProductActivity.class);
         Bundle bundle = new Bundle();
         bundle.putSerializable("product",product);
         intent.putExtras(bundle);
@@ -258,7 +312,7 @@ public class AddFragment extends Fragment {
             // Đọc thông tin về kích thước ảnh mà không tải toàn bộ ảnh vào bộ nhớ
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inJustDecodeBounds = true;
-            InputStream inputStream = getActivity().getContentResolver().openInputStream(imageUri);
+            InputStream inputStream = this.getContentResolver().openInputStream(imageUri);
             BitmapFactory.decodeStream(inputStream, null, options);
             inputStream.close();
 
@@ -271,7 +325,7 @@ public class AddFragment extends Fragment {
             // Đọc ảnh thực tế với tỷ lệ đã tính toán
             options.inJustDecodeBounds = false;
             options.inSampleSize = scale;
-            inputStream = getActivity().getContentResolver().openInputStream(imageUri);
+            inputStream = this.getContentResolver().openInputStream(imageUri);
             Bitmap resizedBitmap = BitmapFactory.decodeStream(inputStream, null, options);
             inputStream.close();
             return resizedBitmap;
@@ -281,5 +335,4 @@ public class AddFragment extends Fragment {
         }
         return null;
     }
-
 }

@@ -173,6 +173,38 @@ public class FirestoreHelper {
         void onFailure(String errorMessage);
     }
 
+    public void updateProductData(Product updatedProduct, String productID,UpdateProductCallback callback) {
+
+        // Cập nhật tài liệu với dữ liệu mới từ đối tượng Product
+        db.collection("products")
+                .document(productID)
+                .update(
+                        "productImageSource", updatedProduct.getProductImageSource(),
+                        "productState", updatedProduct.getProductState(),
+                        "productName", updatedProduct.getProductName(),
+                        "productPrice", updatedProduct.getProductPrice(),
+                        "location", updatedProduct.getLocation(),
+                        "category", updatedProduct.getCategory(),
+                        "brandName", updatedProduct.getBrandName(),
+                        "guarantee", updatedProduct.getGuarantee(),
+                        "description", updatedProduct.getDescription()
+                )
+                .addOnSuccessListener(aVoid -> {
+                    // Gọi phương thức onSuccess trong callback khi cập nhật thành công
+                    callback.onSuccess("Cập nhật sản phẩm thành công");
+                })
+                .addOnFailureListener(e -> {
+                    // Gọi phương thức onFailure trong callback khi có lỗi
+                    callback.onFailure("Lỗi khi cập nhật sản phẩm: " + e.getMessage());
+                });
+    }
+
+    // Định nghĩa callback interface
+    public interface UpdateProductCallback {
+        void onSuccess(String message);
+        void onFailure(String errorMessage);
+    }
+
 
     // Callback interface để trả về danh sách Product
     public interface ProductListCallback {

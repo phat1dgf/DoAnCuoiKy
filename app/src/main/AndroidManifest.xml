@@ -19,6 +19,9 @@
         android:theme="@style/Theme.DoAnCuoiKy"
         tools:targetApi="31">
         <activity
+            android:name=".Product.UpdateProductActivity"
+            android:exported="false" />
+        <activity
             android:name=".User.CreateProfileActivity"
             android:exported="false" />
         <activity

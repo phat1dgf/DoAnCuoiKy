@@ -1,10 +1,12 @@
 package com.example.doancuoiky.Product;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -79,7 +81,12 @@ public class UserProductActivity extends AppCompatActivity {
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (product != null) {
 
+                    goToUpdateProductPage(product);
+                } else {
+                    Toast.makeText(UserProductActivity.this,"Product is null",Toast.LENGTH_SHORT).show();
+                }
             }
         });
         btnDelete.setOnClickListener(new View.OnClickListener() {
@@ -100,6 +107,14 @@ public class UserProductActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    private void goToUpdateProductPage(Product product) {
+        Intent intent = new Intent(UserProductActivity.this, UpdateProductActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("product", product);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     // Giải mã Base64 thành ảnh Bitmap
