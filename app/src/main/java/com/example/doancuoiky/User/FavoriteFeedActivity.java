@@ -64,30 +64,7 @@ public class FavoriteFeedActivity extends AppCompatActivity {
 
         fetchFavoriteProductIds();
         fetchProductList();
-        getListFavoriteFeed();
 
-    }
-
-    // Lấy danh sách các sản phẩm yêu thích
-    private void getListFavoriteFeed() {
-        for (Product product : productList) {
-            if (favoriteProductIds.contains(product.getId())) {
-                favoriteProducts.add(product);
-            }
-        }
-        if (favoriteProducts.isEmpty()) {
-            Toast.makeText(this, "Danh sách yêu thích của bạn đang trống.", Toast.LENGTH_SHORT).show();
-        }
-        userFeedAdapter.notifyDataSetChanged();
-    }
-
-    // Chuyển đến trang chi tiết sản phẩm
-    private void goToUserProductPage(Product product) {
-        Intent intent = new Intent(FavoriteFeedActivity.this, ProductActivity.class);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("product", product);
-        intent.putExtras(bundle);
-        startActivity(intent);
     }
 
     // Fetch danh sách tất cả sản phẩm từ Firestore
@@ -97,10 +74,7 @@ public class FavoriteFeedActivity extends AppCompatActivity {
             public void onSuccess(List<Product> products) {
                 productList.clear();
                 productList.addAll(products);
-
-                if (productList.isEmpty()) {
-                    Toast.makeText(FavoriteFeedActivity.this, "Không có sản phẩm nào.", Toast.LENGTH_SHORT).show();
-                }
+                checkAndUpdateFavorites(); // Kiểm tra và cập nhật danh sách yêu thích
             }
 
             @Override
@@ -113,11 +87,12 @@ public class FavoriteFeedActivity extends AppCompatActivity {
     // Fetch danh sách các sản phẩm mà người dùng đã yêu thích
     private void fetchFavoriteProductIds() {
         String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        firestoreHelper.getFavoriteProductIds(uid, new FirestoreHelper.FavoriteFetchCallback(){
+        firestoreHelper.getFavoriteProductIds(uid, new FirestoreHelper.FavoriteFetchCallback() {
             @Override
             public void onSuccess(List<String> favoriteIds) {
                 favoriteProductIds.clear();
                 favoriteProductIds.addAll(favoriteIds);
+                checkAndUpdateFavorites(); // Kiểm tra và cập nhật danh sách yêu thích
             }
 
             @Override
@@ -126,4 +101,70 @@ public class FavoriteFeedActivity extends AppCompatActivity {
             }
         });
     }
+
+    // Kiểm tra và cập nhật danh sách yêu thích
+    private void checkAndUpdateFavorites() {
+        if (!productList.isEmpty() && !favoriteProductIds.isEmpty()) {
+            favoriteProducts.clear();
+            for (Product product : productList) {
+                if (favoriteProductIds.contains(product.getId())) {
+                    favoriteProducts.add(product);
+                }
+            }
+
+            if (favoriteProducts.isEmpty()) {
+                Toast.makeText(this, "Danh sách yêu thích của bạn đang trống.", Toast.LENGTH_SHORT).show();
+            }
+            userFeedAdapter.notifyDataSetChanged();
+        }
+    }
+
+    // Chuyển đến trang chi tiết sản phẩm
+    private void goToUserProductPage(Product product) {
+        Intent intent = new Intent(FavoriteFeedActivity.this, ProductActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("product", product);
+        intent.putExtras(bundle);
+        startActivity(intent);
+    }
+
+//    // Fetch danh sách tất cả sản phẩm từ Firestore
+//    private void fetchProductList() {
+//        firestoreHelper.getAllProducts(new FirestoreHelper.ProductListCallback() {
+//            @Override
+//            public void onSuccess(List<Product> products) {
+//                productList.clear();
+//                productList.addAll(products);
+//
+//                if (productList.isEmpty()) {
+//                    Toast.makeText(FavoriteFeedActivity.this, "Không có sản phẩm nào.", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(String errorMessage) {
+//                Toast.makeText(FavoriteFeedActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
+//
+//    // Fetch danh sách các sản phẩm mà người dùng đã yêu thích
+//    private void fetchFavoriteProductIds() {
+//        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+//        firestoreHelper.getFavoriteProductIds(uid, new FirestoreHelper.FavoriteFetchCallback(){
+//            @Override
+//            public void onSuccess(List<String> favoriteIds) {
+//                favoriteProductIds.clear();
+//                favoriteProductIds.addAll(favoriteIds);
+//
+//                if (favoriteProducts.isEmpty()) {
+//                    Toast.makeText(FavoriteFeedActivity.this, "ID yêu thích của bạn đang trống.", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//            @Override
+//            public void onFailure(String errorMessage) {
+//                Toast.makeText(FavoriteFeedActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+//            }
+//        });
+//    }
 }

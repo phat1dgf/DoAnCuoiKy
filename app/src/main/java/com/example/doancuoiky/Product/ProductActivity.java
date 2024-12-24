@@ -23,8 +23,10 @@ import com.example.doancuoiky.Helper.FirestoreHelper;
 import com.example.doancuoiky.Models.Product;
 import com.example.doancuoiky.Models.User;
 import com.example.doancuoiky.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -38,7 +40,7 @@ public class ProductActivity extends AppCompatActivity {
     FirestoreHelper firestoreHelper;
     CircleImageView img_user;
 
-
+    String userID;
     String phone;
 
     @Override
@@ -75,6 +77,22 @@ public class ProductActivity extends AppCompatActivity {
         username = findViewById(R.id.tv_username);
         img_user = findViewById(R.id.img_user);
         tv_description = findViewById(R.id.tv_description);
+
+        userID = product.getUserID();
+        firestoreHelper.getUserData(userID, new FirestoreHelper.UserDataCallback() {
+            @Override
+            public void onSuccess(User user) {
+                username.setText(user.getUsername());
+
+                Bitmap img = decodeBase64ToBitmap(user.getImgProfileUrl());
+                img_user.setImageBitmap(img);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+
+            }
+        });
 
         toggle_btn_favorite.setOnClickListener(v -> {
             if (toggle_btn_favorite.isChecked()) {
@@ -187,6 +205,9 @@ public class ProductActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        checkIfProductIsFavorite(currentUserId, product.getId());
+
     }
     private void fetchPhone(Product product){
         firestoreHelper.getUserData(product.getUserID(), new FirestoreHelper.UserDataCallback() {
@@ -217,4 +238,24 @@ public class ProductActivity extends AppCompatActivity {
         byte[] decodedBytes = Base64.decode(base64Image, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
+
+    private void checkIfProductIsFavorite(String uid, String productId) {
+        firestoreHelper.getFavoriteProductIds(uid, new FirestoreHelper.FavoriteFetchCallback() {
+            @Override
+            public void onSuccess(List<String> favoriteIds) {
+                // Kiểm tra nếu productId nằm trong danh sách yêu thích
+                if (favoriteIds.contains(productId)) {
+                    toggle_btn_favorite.setChecked(true);
+                } else {
+                    toggle_btn_favorite.setChecked(false);
+                }
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                Toast.makeText(ProductActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 }

@@ -18,7 +18,9 @@ import androidx.annotation.Nullable;
 import com.example.doancuoiky.Models.Product;
 import com.example.doancuoiky.R;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class UserFeedAdapter extends ArrayAdapter<Product> {
     Activity context;
@@ -44,8 +46,11 @@ public class UserFeedAdapter extends ArrayAdapter<Product> {
         img_product.setImageBitmap(imgProduct);
         TextView tv_product_name = convertView.findViewById(R.id.tv_product_name);
         tv_product_name.setText(product.getProductName());
+
+        String formattedPrice = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"))
+                .format(product.getProductPrice());
         TextView tv_product_price = convertView.findViewById(R.id.tv_product_price);
-        tv_product_price.setText(String.valueOf(product.getProductPrice()));
+        tv_product_price.setText(formattedPrice);
 
         TextView tv_product_state = convertView.findViewById(R.id.tv_product_state);
         tv_product_state.setText(product.getProductState());

@@ -3,6 +3,7 @@ package com.example.doancuoiky.Helper;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.doancuoiky.Models.Product;
@@ -107,7 +108,6 @@ public class FirestoreHelper {
     }
 
     public void getUserData(String userID ,UserDataCallback callback) {
-
         // Truy vấn Document "profile" trong Collection của UID
         db.collection("users")
                 .document(userID)
@@ -136,40 +136,6 @@ public class FirestoreHelper {
         void onFailure(String errorMessage);
     }
 
-//    public void saveProductData(Context context,
-//                                String userID,
-//                                Bitmap productImage,
-//                                String productState,
-//                                String productName,
-//                                int productPrice,
-//                                String location,
-//                                String category,
-//                                String brandName,
-//                                String guarantee,
-//                                String description) {
-////        // Lấy UID của người dùng hiện tại
-////        String uid = product.getUserID();
-//
-//        // Chuyển đổi ảnh Bitmap thành chuỗi Base64
-//        String imgProfileBase64 = encodeImageToBase64(productImage);
-//
-//        // Tạo đối tượng Product
-//        Product product = new Product(userID, imgProfileBase64, productState, productName,productPrice,location,category,brandName,guarantee,description);
-//        String productId = UUID.randomUUID().toString();
-//        product.setId(productId);
-//        // Lưu vào Firestore
-//        db.collection("products")
-//                .document(productId)  // random id
-//                .set(product)
-//                .addOnSuccessListener(aVoid -> {
-//                    // Lưu thành công
-//                    Toast.makeText(context, "Lưu profile thành công", Toast.LENGTH_SHORT).show();
-//                })
-//                .addOnFailureListener(e -> {
-//                    // Lỗi khi lưu
-//                    Toast.makeText(context, "Lỗi khi lưu profile: " + e.getMessage(), Toast.LENGTH_LONG).show();
-//                });
-//    }
 
     public void saveProductData(Context context, Product product) {
 
@@ -234,6 +200,24 @@ public class FirestoreHelper {
     }
 
     // Fetch danh sách productId từ collection "favorite" của người dùng
+//    public void getFavoriteProductIds(String uid, FavoriteFetchCallback callback) {
+//        CollectionReference favoriteRef = db.collection("users")
+//                .document(uid)
+//                .collection("favorite");
+//
+//        favoriteRef.get()
+//                .addOnSuccessListener(queryDocumentSnapshots -> {
+//                    List<String> favoriteIds = new ArrayList<>();
+//                    for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+//                        String productId = document.getString("productId");
+//                        if (productId != null) {
+//                            favoriteIds.add(productId);
+//                        }
+//                    }
+//                    callback.onSuccess(favoriteIds);
+//                })
+//                .addOnFailureListener(e -> callback.onFailure("Lỗi khi lấy sản phẩm yêu thích: " + e.getMessage()));
+//    }
     public void getFavoriteProductIds(String uid, FavoriteFetchCallback callback) {
         CollectionReference favoriteRef = db.collection("users")
                 .document(uid)
@@ -243,10 +227,8 @@ public class FirestoreHelper {
                 .addOnSuccessListener(queryDocumentSnapshots -> {
                     List<String> favoriteIds = new ArrayList<>();
                     for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                        String productId = document.getString("productId");
-                        if (productId != null) {
-                            favoriteIds.add(productId);
-                        }
+                        String productId = document.getId(); // Lấy ID document
+                        favoriteIds.add(productId);
                     }
                     callback.onSuccess(favoriteIds);
                 })

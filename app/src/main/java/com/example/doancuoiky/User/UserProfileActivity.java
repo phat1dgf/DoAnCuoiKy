@@ -54,9 +54,12 @@ public class UserProfileActivity extends AppCompatActivity {
             return insets;
         });
 
-        fetchUserProfile();
+
         mAuth = FirebaseAuth.getInstance();
-        uid = mAuth.getCurrentUser().getUid();
+        user = mAuth.getCurrentUser();
+        uid = user.getUid();
+
+        fetchUserProfile();
 
         img_profile = findViewById(R.id.img_profile);
         btn_gallery = findViewById(R.id.btn_gallery);
