@@ -136,38 +136,56 @@ public class FirestoreHelper {
         void onFailure(String errorMessage);
     }
 
-    public void saveProductData(Context context,
-                                String userID,
-                                Bitmap productImage,
-                                String productState,
-                                String productName,
-                                int productPrice,
-                                String location,
-                                String category,
-                                String brandName,
-                                String guarantee,
-                                String description) {
-//        // Lấy UID của người dùng hiện tại
-//        String uid = product.getUserID();
+//    public void saveProductData(Context context,
+//                                String userID,
+//                                Bitmap productImage,
+//                                String productState,
+//                                String productName,
+//                                int productPrice,
+//                                String location,
+//                                String category,
+//                                String brandName,
+//                                String guarantee,
+//                                String description) {
+////        // Lấy UID của người dùng hiện tại
+////        String uid = product.getUserID();
+//
+//        // Chuyển đổi ảnh Bitmap thành chuỗi Base64
+//        String imgProfileBase64 = encodeImageToBase64(productImage);
+//
+//        // Tạo đối tượng Product
+//        Product product = new Product(userID, imgProfileBase64, productState, productName,productPrice,location,category,brandName,guarantee,description);
+//        String productId = UUID.randomUUID().toString();
+//        product.setId(productId);
+//        // Lưu vào Firestore
+//        db.collection("products")
+//                .document(productId)  // random id
+//                .set(product)
+//                .addOnSuccessListener(aVoid -> {
+//                    // Lưu thành công
+//                    Toast.makeText(context, "Lưu profile thành công", Toast.LENGTH_SHORT).show();
+//                })
+//                .addOnFailureListener(e -> {
+//                    // Lỗi khi lưu
+//                    Toast.makeText(context, "Lỗi khi lưu profile: " + e.getMessage(), Toast.LENGTH_LONG).show();
+//                });
+//    }
 
-        // Chuyển đổi ảnh Bitmap thành chuỗi Base64
-        String imgProfileBase64 = encodeImageToBase64(productImage);
+    public void saveProductData(Context context, Product product) {
 
-        // Tạo đối tượng Product
-        Product product = new Product(userID, imgProfileBase64, productState, productName,productPrice,location,category,brandName,guarantee,description);
+        // Sử dụng UUID tạo id ngẫu nhiên cho sản phẩm
         String productId = UUID.randomUUID().toString();
         product.setId(productId);
+
         // Lưu vào Firestore
         db.collection("products")
-                .document(productId)  // random id
+                .document(productId)
                 .set(product)
                 .addOnSuccessListener(aVoid -> {
-                    // Lưu thành công
-                    Toast.makeText(context, "Lưu profile thành công", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "Lưu sản phẩm thành công", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
-                    // Lỗi khi lưu
-                    Toast.makeText(context, "Lỗi khi lưu profile: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "Lỗi khi lưu sản phẩm: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 });
     }
 

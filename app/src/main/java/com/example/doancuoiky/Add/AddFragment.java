@@ -4,6 +4,7 @@ package com.example.doancuoiky.Add;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,10 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class AddFragment extends Fragment {
@@ -97,14 +103,14 @@ public class AddFragment extends Fragment {
             }
         });
 
-            btnAccept.setOnClickListener(new View.OnClickListener() {
+        btnAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 boolean isValid = validateAllInputs();
 
                 if (isValid) {
                     String productName = etProductName.getText().toString().trim();
-                    int productPrice = Integer.parseInt(etProductPrice.getText().toString().trim()) ;
+                    int productPrice = Integer.parseInt(etProductPrice.getText().toString().trim());
                     String productDescription = etProductDescription.getText().toString().trim();
                     String productCategory = act_category.getText().toString().trim();
                     String productState = act_state.getText().toString().trim();
@@ -112,33 +118,56 @@ public class AddFragment extends Fragment {
                     String productGuarantee = act_guarantee.getText().toString().trim();
                     String productLocation = act_location.getText().toString().trim();
 
-                    String productImage = selectedImageUri.toString();
-                    Product newProduct = new Product(currentUid,productImage,productState,productName,productPrice,productLocation,productCategory,productBrand,productGuarantee,productDescription);
-
+                    // Lấy ảnh đã chọn
                     BitmapDrawable drawable = (BitmapDrawable) imgSelected.getDrawable();
                     Bitmap imgBitmap = drawable.getBitmap();
 
-                    saveProduct(currentUid,imgBitmap,productState,productName,productPrice,productLocation,productCategory,productBrand,productGuarantee,productDescription);
+                    // Tạo đối tượng Product mới
+                    Product newProduct = new Product(
+                            currentUid,
+                            encodeImageToBase64(imgBitmap), // Truyền Bitmap vào Product
+                            productState,
+                            productName,
+                            productPrice,
+                            productLocation,
+                            productCategory,
+                            productBrand,
+                            productGuarantee,
+                            productDescription
+                    );
 
+                    // Lưu sản phẩm vào Firestore
+                    firestoreHelper.saveProductData(getActivity(), newProduct);
+
+                    // Chuyển sang trang sản phẩm người dùng
                     goToUserProductPage(newProduct);
                 }
             }
         });
+
         return view;
     }
 
-    private void saveProduct(String userID,
-                             Bitmap productImageSource,
-                             String productState,
-                             String productName,
-                             int productPrice,
-                             String location,
-                             String category,
-                             String brandName,
-                             String guarantee,
-                             String description) {
-        firestoreHelper.saveProductData(getActivity(),userID,productImageSource,productState,productName,productPrice,location,category,brandName,guarantee,description);
+
+    // Chuyển ảnh Bitmap thành chuỗi Base64
+    private String encodeImageToBase64(Bitmap imgProfile) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        imgProfile.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
     }
+//    private void saveProduct(String userID,
+//                             Bitmap productImageSource,
+//                             String productState,
+//                             String productName,
+//                             int productPrice,
+//                             String location,
+//                             String category,
+//                             String brandName,
+//                             String guarantee,
+//                             String description) {
+//        firestoreHelper.saveProductData(getActivity(),userID,productImageSource,productState,productName,productPrice,location,category,brandName,guarantee,description);
+//    }
 
     private boolean validateAllInputs() {
         boolean isTextInputValid = textinputHandle();
@@ -215,20 +244,19 @@ public class AddFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
-
-            // compare the resultCode with the
-            // SELECT_PICTURE constant
             if (requestCode == SELECT_PICTURE) {
-                // Get the url of the image from data
+                // Get the image Uri
                 selectedImageUri = data.getData();
                 if (selectedImageUri != null) {
-                    // update the preview image in the layout
-                    imgSelected.setImageURI(selectedImageUri);
+                    // Reduce image size before setting it
+                    Bitmap resizedBitmap = getResizedBitmap(selectedImageUri, 800); // You can adjust the size (e.g. 800)
+                    imgSelected.setImageBitmap(resizedBitmap); // Set resized image to ImageView
                     isImageSelected = true;
                 }
             }
         }
     }
+
     private void goToUserProductPage(Product product){
         Intent intent =new Intent(getActivity(), UserProductActivity.class);
         Bundle bundle = new Bundle();
@@ -236,4 +264,34 @@ public class AddFragment extends Fragment {
         intent.putExtras(bundle);
         startActivity(intent);
     }
+
+    private Bitmap getResizedBitmap(Uri imageUri, int maxSize) {
+        try {
+            // Đọc thông tin về kích thước ảnh mà không tải toàn bộ ảnh vào bộ nhớ
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            InputStream inputStream = getActivity().getContentResolver().openInputStream(imageUri);
+            BitmapFactory.decodeStream(inputStream, null, options);
+            inputStream.close();
+
+            // Tính toán tỷ lệ giảm kích thước ảnh (scale)
+            int scale = 1;
+            while (options.outWidth / scale > maxSize || options.outHeight / scale > maxSize) {
+                scale *= 2;
+            }
+
+            // Đọc ảnh thực tế với tỷ lệ đã tính toán
+            options.inJustDecodeBounds = false;
+            options.inSampleSize = scale;
+            inputStream = getActivity().getContentResolver().openInputStream(imageUri);
+            Bitmap resizedBitmap = BitmapFactory.decodeStream(inputStream, null, options);
+            inputStream.close();
+            return resizedBitmap;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

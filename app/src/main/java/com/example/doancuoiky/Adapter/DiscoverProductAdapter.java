@@ -54,6 +54,7 @@ public class DiscoverProductAdapter extends RecyclerView.Adapter<DiscoverProduct
         }
         Bitmap imgProduct = decodeBase64ToBitmap(product.getProductImageSource());
         holder.imgProduct.setImageBitmap(imgProduct);
+        holder.productName.setText(product.getProductName());
         // Định dạng giá tiền
         String formattedPrice = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"))
                 .format(product.getProductPrice());
