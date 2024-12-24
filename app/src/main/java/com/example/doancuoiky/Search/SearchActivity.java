@@ -1,5 +1,6 @@
 package com.example.doancuoiky.Search;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,9 +19,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.doancuoiky.Adapter.SearchedProductAdapter;
 
 import com.example.doancuoiky.Helper.FirestoreHelper;
+import com.example.doancuoiky.Interface.IClickProductItemListener;
 import com.example.doancuoiky.Models.Product;
+import com.example.doancuoiky.Product.ProductActivity;
+import com.example.doancuoiky.Product.UserProductActivity;
 import com.example.doancuoiky.R;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,7 +109,12 @@ public class SearchActivity extends AppCompatActivity {
         RecyclerView.ItemDecoration itemDecoration = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
         lvProduct.addItemDecoration(itemDecoration);
 
-        productAdapter.setData(filteredList);
+        productAdapter.setData(filteredList, new IClickProductItemListener() {
+            @Override
+            public void onClickProductItem(Product product) {
+                onClickGoToProductPage(product);
+            }
+        });
         lvProduct.setAdapter(productAdapter);
 
         fetchAndFilterProducts(keyword);
@@ -123,8 +133,7 @@ public class SearchActivity extends AppCompatActivity {
                 filteredList.clear();
                 filteredList.addAll(getFilteredProducts(keyword));
 
-                // Cập nhật adapter
-                productAdapter.setData(filteredList); // Gán lại data cho adapter
+
                 productAdapter.notifyDataSetChanged();
             }
             @Override
@@ -132,6 +141,20 @@ public class SearchActivity extends AppCompatActivity {
                 Toast.makeText(SearchActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void onClickGoToProductPage(Product product){
+        Intent intent;
+        if(product.getUserID().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())){
+            intent = new Intent(SearchActivity.this, UserProductActivity.class);
+        }
+        else {
+            intent = new Intent(SearchActivity.this, ProductActivity.class);
+        }
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("product", product);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     private List<Product> getFilteredProducts(String keyword) {

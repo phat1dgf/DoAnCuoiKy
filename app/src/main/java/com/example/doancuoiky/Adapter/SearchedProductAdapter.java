@@ -8,11 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.doancuoiky.Interface.IClickProductItemListener;
 import com.example.doancuoiky.Models.Product;
 import com.example.doancuoiky.R;
 
@@ -23,10 +25,12 @@ import java.util.Locale;
 public class SearchedProductAdapter extends RecyclerView.Adapter<SearchedProductAdapter.ProductViewHolder> {
 
     private List<Product> listProduct;
+    private IClickProductItemListener iClickProductItemListener;
 
 
-    public void setData(List<Product> list){
+    public void setData(List<Product> list,IClickProductItemListener iClickProductItemListener){
         this.listProduct = list;
+        this.iClickProductItemListener = iClickProductItemListener;
         notifyDataSetChanged();
     }
 
@@ -53,6 +57,12 @@ public class SearchedProductAdapter extends RecyclerView.Adapter<SearchedProduct
         holder.productPrice.setText(formattedPrice);
         holder.location.setText(product.getLocation());
         holder.productState.setText(product.getProductState());
+        holder.productItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                iClickProductItemListener.onClickProductItem(product);
+            }
+        });
     }
 
     // Giải mã Base64 thành ảnh Bitmap
@@ -70,7 +80,7 @@ public class SearchedProductAdapter extends RecyclerView.Adapter<SearchedProduct
     }
 
     public class ProductViewHolder extends RecyclerView.ViewHolder{
-
+        private LinearLayout productItem;
         private ImageView imgProduct;
         public TextView productName;
         public TextView location;
@@ -80,6 +90,7 @@ public class SearchedProductAdapter extends RecyclerView.Adapter<SearchedProduct
 
         public ProductViewHolder(@NonNull View itemView) {
             super(itemView);
+            productItem = itemView.findViewById(R.id.product_item);
             imgProduct = itemView.findViewById(R.id.img_product);
             productName = itemView.findViewById(R.id.tv_product_name);
             location= itemView.findViewById(R.id.tv_product_location);
@@ -87,4 +98,5 @@ public class SearchedProductAdapter extends RecyclerView.Adapter<SearchedProduct
             productState = itemView.findViewById(R.id.tv_product_state);
         }
     }
+
 }

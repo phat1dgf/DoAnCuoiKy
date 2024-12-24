@@ -155,6 +155,25 @@ public class FirestoreHelper {
                 });
     }
 
+    public void deleteProductById(String productId, DeleteProductCallback callback) {
+        db.collection("products")
+                .document(productId)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    callback.onSuccess("Sản phẩm đã được xóa thành công.");
+                })
+                .addOnFailureListener(e -> {
+                    callback.onFailure("Lỗi khi xóa sản phẩm: " + e.getMessage());
+                });
+    }
+
+    // Định nghĩa interface DeleteProductCallback
+    public interface DeleteProductCallback {
+        void onSuccess(String message);
+        void onFailure(String errorMessage);
+    }
+
+
     // Callback interface để trả về danh sách Product
     public interface ProductListCallback {
         void onSuccess(List<Product> productList);
@@ -199,25 +218,6 @@ public class FirestoreHelper {
                 .addOnFailureListener(e -> callback.onFailure("Lỗi khi thêm sản phẩm: " + e.getMessage()));
     }
 
-    // Fetch danh sách productId từ collection "favorite" của người dùng
-//    public void getFavoriteProductIds(String uid, FavoriteFetchCallback callback) {
-//        CollectionReference favoriteRef = db.collection("users")
-//                .document(uid)
-//                .collection("favorite");
-//
-//        favoriteRef.get()
-//                .addOnSuccessListener(queryDocumentSnapshots -> {
-//                    List<String> favoriteIds = new ArrayList<>();
-//                    for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-//                        String productId = document.getString("productId");
-//                        if (productId != null) {
-//                            favoriteIds.add(productId);
-//                        }
-//                    }
-//                    callback.onSuccess(favoriteIds);
-//                })
-//                .addOnFailureListener(e -> callback.onFailure("Lỗi khi lấy sản phẩm yêu thích: " + e.getMessage()));
-//    }
     public void getFavoriteProductIds(String uid, FavoriteFetchCallback callback) {
         CollectionReference favoriteRef = db.collection("users")
                 .document(uid)

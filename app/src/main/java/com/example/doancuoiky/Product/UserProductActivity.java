@@ -5,9 +5,11 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Base64;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +17,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.doancuoiky.Helper.FirestoreHelper;
 import com.example.doancuoiky.Models.Product;
 import com.example.doancuoiky.R;
 
@@ -26,6 +29,8 @@ public class UserProductActivity extends AppCompatActivity {
     ImageView imgProduct;
     TextView tvProductName, tvProductPrice, tvProductState,tvProductLocation,tvProductDescription;
     Button btnUpdate, btnDelete;
+
+    FirestoreHelper firestoreHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +54,7 @@ public class UserProductActivity extends AppCompatActivity {
         if (product == null) {
             return; // Thoát nếu không có đối tượng product
         }
-
+        firestoreHelper = new FirestoreHelper();
         imgProduct = findViewById(R.id.img_product);
         tvProductName = findViewById(R.id.tv_product_name);
         tvProductPrice = findViewById(R.id.tv_product_price);
@@ -71,7 +76,30 @@ public class UserProductActivity extends AppCompatActivity {
         tvProductLocation.setText(product.getLocation());
         tvProductDescription.setText(product.getDescription());
 
+        btnUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+            }
+        });
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                firestoreHelper.deleteProductById(product.getId(), new FirestoreHelper.DeleteProductCallback() {
+                    @Override
+                    public void onSuccess(String message) {
+                        Toast.makeText(UserProductActivity.this, message, Toast.LENGTH_SHORT).show();
+                        // Kết thúc activity sau khi xóa
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(String errorMessage) {
+                        Toast.makeText(UserProductActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
     }
 
     // Giải mã Base64 thành ảnh Bitmap
