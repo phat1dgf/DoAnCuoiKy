@@ -26,6 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Apple"
+        android:backgroundTint="@color/primary"
         android:layout_marginEnd="10dp"/>
 
     <Button
@@ -33,6 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Samsung"
+        android:backgroundTint="@color/primary"
         android:layout_marginEnd="10dp"/>
 
     <Button
@@ -40,6 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Xiaomi"
+        android:backgroundTint="@color/primary"
         android:layout_marginEnd="10dp"/>
 
     <Button
@@ -47,6 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Huawei"
+        android:backgroundTint="@color/primary"
         android:layout_marginEnd="10dp"/>
 
     <Button
@@ -54,12 +58,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Oppo"
+        android:backgroundTint="@color/primary"
         android:layout_marginEnd="10dp"/>
 
     <Button
         android:id="@+id/btn_vivo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/primary"
         android:text="Vivo" />
 
     <Button
@@ -67,6 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Realme"
+        android:backgroundTint="@color/primary"
         android:layout_marginEnd="10dp"/>
 
     <Button
@@ -74,12 +81,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="OnePlus"
+        android:backgroundTint="@color/primary"
         android:layout_marginEnd="10dp"/>
 
     <Button
         android:id="@+id/btn_google"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/primary"
         android:text="Google"
         android:layout_marginEnd="10dp"/>
 
@@ -88,6 +97,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Nokia"
+        android:backgroundTint="@color/primary"
         android:layout_marginEnd="10dp"/>
 
     <Button
@@ -95,12 +105,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="LG"
+        android:backgroundTint="@color/primary"
         android:layout_marginEnd="10dp"/>
 
     <Button
         android:id="@+id/btn_other_brand"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/primary"
         android:text="Khác"
         android:layout_marginEnd="10dp"/>
 </com.google.android.flexbox.FlexboxLayout>

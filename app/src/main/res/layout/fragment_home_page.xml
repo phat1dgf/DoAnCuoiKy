@@ -22,6 +22,7 @@
                 android:textSize="25dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="10dp"
+                android:textColor="@color/primary"
                 android:textStyle="bold"/>
 
             <!-- GridView 2 cột ngang -->
@@ -41,6 +42,7 @@
                 android:textSize="25dp"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
+                android:textColor="@color/primary"
                 android:textStyle="bold"/>
             <!-- ListView ngang -->
             <androidx.recyclerview.widget.RecyclerView
@@ -58,6 +60,7 @@
                 android:text="Có thể bạn quan tâm"
                 android:textSize="25dp"
                 android:layout_marginLeft="20dp"
+                android:textColor="@color/primary"
                 android:layout_marginTop="20dp"
                 android:textStyle="bold"/>
             <!-- GridView 2 cột dọc -->

@@ -100,14 +100,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Sửa tin" />
+            android:text="Sửa tin"
+            android:backgroundTint="@color/primary"
+            android:layout_margin="5dp"/>
 
         <Button
             android:id="@+id/btn_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Đã bán/Xoá tin" />
+            android:text="Đã bán/Xoá tin"
+            android:backgroundTint="@color/primary"
+            android:layout_margin="5dp"/>
 
     </LinearLayout>
 

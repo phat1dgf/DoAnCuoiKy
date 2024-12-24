@@ -115,7 +115,7 @@
                         android:ellipsize="end"
                         android:maxLines="2"
                         android:text="username"
-                        android:textSize="15dp"
+                        android:textSize="25dp"
                         android:textStyle="bold" />
                 </LinearLayout>
 
@@ -155,6 +155,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:backgroundTint="@color/primary"
+            android:layout_margin="5dp"
             android:text="Gọi" />
 
         <Button
@@ -162,6 +164,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:backgroundTint="@color/primary"
+            android:layout_margin="5dp"
             android:text="SMS" />
 
     </LinearLayout>
